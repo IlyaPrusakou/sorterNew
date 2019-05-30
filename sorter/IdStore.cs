@@ -11,29 +11,54 @@ namespace sorter
 {
      public class IdStore
     {
-        public string Category { get; set; }
-        public List<string> Offer { get; set; }
-        public Dictionary<string, string> CategoryAndOffers { get; set; }
+        //public string Category { get; set; }
+        //public List<string> Offer { get; set; }
+        public Dictionary<string, List<string>> CategoryAndOffers { get; set; }
         public IdStore()
         {
-            CategoryAndOffers = new Dictionary<string, string>();
+            CategoryAndOffers = new Dictionary<string, List<string>>();
         }
 
-        private string GetCategoryId (XmlReader rdr)
+        private List<string> GetListOfCategoryId (XmlReader rdr)
+        {
+            List<string> Keys = new List<string>();
+            XDocument doc = XDocument.Load(rdr);
+           XElement rootYmlElement = doc.Root;
+            IEnumerable<XElement> CollectionOfCategories = rootYmlElement.Descendants("category");
+            foreach (XElement item in CollectionOfCategories)
+            {
+                Keys.Add(item.FirstAttribute.Value);
+            }
+            return Keys;
+        }
+
+        private void GetCollectionOfOfferId(XmlReader rdr, string categoryid)
         {
             string result = null;
+            List<string> Values = new List<string>();
             XDocument doc = XDocument.Load(rdr);
             XElement rootYmlElement = doc.Root;
-            IEnumerable<XElement> CollectionOfCategories = rootYmlElement.Descendants("category");
-            foreach (XElement el in CollectionOfCategories)
+            XElement offers = rootYmlElement.Element("Offers");
+            IEnumerable<XElement> CollectionOfOffers = offers.Descendants("CategoryId");
+            foreach (XElement item in CollectionOfOffers)
             {
-                CategoryAndOffers.Add(el.FirstAttribute.Value, null);
+                if (item.Value == categoryid)
+                {
+                    XElement baseElement = item.Parent;
+                    result = baseElement.Attribute("id").Value;
+                    Values.Add(result);
+                }
+                CategoryAndOffers.Add(categoryid, Values);
             }
-            return result;
+
         }
         public void  GetOfferList(XmlReader rdr)
         {
-            GetCategoryId(rdr);
+            List<string> ggg = GetListOfCategoryId(rdr);
+            foreach (string item in ggg)
+            {
+                GetCollectionOfOfferId(rdr, item);
+            }
         }
     }
 }

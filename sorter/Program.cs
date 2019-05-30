@@ -20,7 +20,11 @@ namespace sorter
                 store.GetOfferList(rdr);
                 foreach (string key in store.CategoryAndOffers.Keys)
                 {
-                    Console.WriteLine(key);
+                    foreach (var item in store.CategoryAndOffers[key])
+                    {
+                        Console.WriteLine(key + "   " + item);
+                    }
+                    
                 }
             }
             Console.WriteLine("end");
