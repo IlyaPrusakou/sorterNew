@@ -13,7 +13,7 @@ namespace sorter
     {
         //public string Category { get; set; }
         //public List<string> Offer { get; set; }
-        public Dictionary<string, List<string>> CategoryAndOffers { get; set; }
+        public Dictionary<string, List<string>> CategoryAndOffers { get; set; } //
         public IdStore()
         {
             CategoryAndOffers = new Dictionary<string, List<string>>();

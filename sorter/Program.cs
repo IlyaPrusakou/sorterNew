@@ -22,7 +22,7 @@ namespace sorter
                 {
                     foreach (var item in store.CategoryAndOffers[key])
                     {
-                        Console.WriteLine(key + "   " + item);
+                        Console.WriteLine(key + "   " + item); ///
                     }
                     
                 }
